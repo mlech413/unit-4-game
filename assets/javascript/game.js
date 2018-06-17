@@ -61,7 +61,6 @@ $(document).ready(function() {
         console.log("crystalArray:" + crystalArray);
     };
 
-
     function initializeIndicators() {
         gameOver = false;
         crystalNum = 0;
@@ -71,6 +70,7 @@ $(document).ready(function() {
         gameOver = false;
     }
 
+    //--function to check status and see if game is over.
     function checkStatus() {
         if(userTotal == randomNumber) {
             // Winner
@@ -84,6 +84,7 @@ $(document).ready(function() {
         }
     };
 
+    //--function to send the updated user total and win/loss totals.
     function sendInfo() {
         var userTotalHtml = "<h2>" + userTotal + "</h2>";
         document.querySelector(".user-total").innerHTML = userTotalHtml;
@@ -91,6 +92,7 @@ $(document).ready(function() {
         document.querySelector(".totals").innerHTML = totalsHtml;
     };
 
+    //--function to send additional display message at bottom when user wins or loses.
     function sendMessage() {
         console.log("function sendMessage()");
         console.log("userTotal" + userTotal);
@@ -108,6 +110,7 @@ $(document).ready(function() {
         document.querySelector(".message").innerHTML = messageHtml;
     };
 
+    //--determine which of the 4 crystals was clicked, and add that crystal's amount in the array.
     $("#crystal-1").on("click", function() {
         userTotal = parseInt(userTotal);
         crystalArray[0] = parseInt(crystalArray[0]);
@@ -140,12 +143,14 @@ $(document).ready(function() {
         // console.log("userTotal: " + userTotal);
     });
 
+    //--on any crystal clicked, check if the game is over, and send the screen data back.
     $(".crystal").on("click", function() {
         // console.log("ON ALL CLICKS.");
         // console.log("checkStatus call");
         checkStatus();
         sendInfo();
         sendMessage();
+        //--if the game is over, send final numbers and message, and play again.
         if(gameOver) {
             sendMessage();
             initializeIndicators();
