@@ -6,84 +6,152 @@ $(document).ready(function() {
     var crystalArray = [];
     var randomNumber = 0;
     var userTotal = 0;
-    var firstTimeIn = true;
     var gameOver = false;
 
-    if (firstTimeIn) {
+    //--run all starting functions.
+    newGame();
+    checkStatus();
+    sendInfo();
+
+    function newGame() {
+        
+        //--get the random number with a loop so it picks again if it's not at least 19.
         for(var i = 0; randomNumber < 19; i++) {
             randomNumber = [Math.floor(Math.random() * 120) + 1];
-            randomNumIsChosen = true;
-            console.log("randomNumber: " + randomNumber);
+            randomNumber = parseInt(randomNumber);
+            // console.log("randomNumber: " + randomNumber);
         }
+        
+        //--loop through all 4 crystals to get a random value for each.
         for(var i = 0; i < 4; i++) {
+            // console.log("top of I loop, i=" + i);
             crystalNum = [Math.floor(Math.random() * 12) + 1];
-            // console.log("crystalNum: " + crystalNum);
-            crystalArray[i] = crystalNum;
-            console.log("crystalArray" + i + ": " + crystalArray[i]);
+            // console.log("  crystalNum: " + crystalNum);
+            
+            //--nested loop to see if the crystal value was already assigned to another crystal.
+            for(var n = -1; n <= i; n++) {
+                // console.log("  top of N loop, n=" + n);
+                // console.log("  crystalNum: " + crystalNum);
+                // console.log("  crystalArray[" + n + "]: " + crystalArray[n])
+                // console.log("  crystalArray[n]: " + crystalArray)
+
+                //--make sure both are integers before comparison.
+                crystalNum=parseInt(crystalNum);
+                crystalArray[n]=parseInt(crystalArray[n]);
+
+                 //--if crystal value was previously used, select another random value, and decrease indicator so it tests it again.
+                if(crystalNum==crystalArray[n]) {
+                    // console.log("    crystalArray: " + crystalArray)
+                    // console.log("    crystalNum==crystalArray[n]")
+                    crystalNum = [Math.floor(Math.random() * 12) + 1];
+                    n--;
+                }
+                
+                //--all other values in crystal array were not used, so move this random number to the array and end nested loop.
+                else if(n==i) {
+                    crystalArray[i] = crystalNum;
+                    // console.log("    set crystalArray[i] = crystalNum");
+                }
+            }
         };
-        firstTimeIn = false;
+        
+        //--write out the main random number to the screen.
+        var randomNumberHtml = "<h2>" + randomNumber + "</h2>";
+        document.querySelector(".random-number").innerHTML = randomNumberHtml;
+        console.log("crystalArray:" + crystalArray);
     };
 
-    var randomNumberHtml = "<h2>" + randomNumber + "</h2>";
-    document.querySelector(".random-number").innerHTML = randomNumberHtml;
 
-    // function initializeIndicators() {
-    //     gameOver = false;
-    //     $("#crystal-1, #crystal-2, #crystal-3, #crystal-4").empty();
-    // }
+    function initializeIndicators() {
+        gameOver = false;
+        crystalNum = 0;
+        crystalArray = [];
+        randomNumber = 0;
+        userTotal = 0;
+        gameOver = false;
+    }
+
+    function checkStatus() {
+        if(userTotal == randomNumber) {
+            // Winner
+            wins++;
+            gameOver = true;
+        }
+        else if(userTotal > randomNumber) {
+            // Loser
+            losses++;
+            gameOver = true;
+        }
+    };
+
+    function sendInfo() {
+        var userTotalHtml = "<h2>" + userTotal + "</h2>";
+        document.querySelector(".user-total").innerHTML = userTotalHtml;
+        var totalsHtml = "<h2>Wins: " + wins + "&nbsp &nbsp &nbsp Losses: " + losses + "</h2>";
+        document.querySelector(".totals").innerHTML = totalsHtml;
+    };
+
+    function sendMessage() {
+        console.log("function sendMessage()");
+        console.log("userTotal" + userTotal);
+        console.log("randomNumber" + randomNumber);
+        if(userTotal == randomNumber) {
+            var messageHtml = "<h2>YOU WIN!</h2>";
+        }
+        else if(userTotal > randomNumber) {
+            var messageHtml = "<h2>YOU LOSE!</h2>";
+        }
+        else {
+            var messageHtml = "";
+        }
+        console.log("messageHtml: " + messageHtml)
+        document.querySelector(".message").innerHTML = messageHtml;
+    };
 
     $("#crystal-1").on("click", function() {
         userTotal = parseInt(userTotal);
-        crystalArray[0] = parseInt( crystalArray[0]);
+        crystalArray[0] = parseInt(crystalArray[0]);
         // console.log("userTotal: " + userTotal);
         userTotal = userTotal += crystalArray[0];
-        console.log("userTotal: " + userTotal);
-        checkStatus();
-        sendInfo();
+        // console.log("userTotal: " + userTotal);
     });
   
     $("#crystal-2").on("click", function() {
         userTotal = parseInt(userTotal);
-        crystalArray[1] = parseInt( crystalArray[1]);
+        crystalArray[1] = parseInt(crystalArray[1]);
         // console.log("userTotal: " + userTotal);
         userTotal = userTotal += crystalArray[1];
-        console.log("userTotal: " + userTotal);
+        // console.log("userTotal: " + userTotal);
     });
 
     $("#crystal-3").on("click", function() {
         userTotal = parseInt(userTotal);
-        crystalArray[2] = parseInt( crystalArray[2]);
+        crystalArray[2] = parseInt(crystalArray[2]);
         // console.log("userTotal: " + userTotal);
         userTotal = userTotal += crystalArray[2];
-        console.log("userTotal: " + userTotal);
+        // console.log("userTotal: " + userTotal);
     });
 
     $("#crystal-4").on("click", function() {
         userTotal = parseInt(userTotal);
-        crystalArray[3] = parseInt( crystalArray[3]);
+        crystalArray[3] = parseInt(crystalArray[3]);
         // console.log("userTotal: " + userTotal);
         userTotal = userTotal += crystalArray[3];
-        console.log("userTotal: " + userTotal);
+        // console.log("userTotal: " + userTotal);
     });
 
     $(".crystal").on("click", function() {
-        console.log("ALL TIMES CLICKED");
+        // console.log("ON ALL CLICKS.");
+        // console.log("checkStatus call");
         checkStatus();
         sendInfo();
+        sendMessage();
+        if(gameOver) {
+            sendMessage();
+            initializeIndicators();
+            newGame();
+            sendInfo();
+        }
     });
-
-    function checkStatus() {
-        if(userTotal==randomNumber) {
-            // Winner
-        }
-        else if(userTotal>randomNumber) {
-            // Loser
-        }
-        // else continue playing
-    };
-
-    function sendInfo() {
-
-    };
 
 });
