@@ -14,7 +14,7 @@
 
 ### Each time when the game starts, the game will change the value of each crystal.
 
-### Begin by opening index.html
+### Begin by opening <a href="https://mlech413.github.io/unit-4-game/index.html">index.html</a>
 
 ### Most importantly, have fun!!!!!
 
