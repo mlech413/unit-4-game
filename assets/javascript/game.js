@@ -7,7 +7,8 @@ $(document).ready(function() {
     var randomNumber = 0;
     var userTotal = 0;
     var gameOver = false;
-
+    var audioElement = document.createElement("audio");
+    
     //--run all starting functions.
     newGame();
     checkStatus();
@@ -76,11 +77,17 @@ $(document).ready(function() {
             // Winner
             wins++;
             gameOver = true;
+            // --play a sound
+            audioElement.setAttribute("src", "assets/audio/win-tada.mp3");
+            audioElement.play();
         }
         else if(userTotal > randomNumber) {
             // Loser
             losses++;
             gameOver = true;
+            // --play a sound
+            audioElement.setAttribute("src", "assets/audio/loss-powerfailure.mp3");
+            audioElement.play();
         }
     };
 
